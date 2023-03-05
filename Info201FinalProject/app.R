@@ -23,11 +23,18 @@ ui <- fluidPage(
     tabPanel("Country sales vs genre",
              sidebarLayout(
                sidebarPanel(
-                 p("This graph illustrates the relationship between each country's sales vs the genre"),
+                 p("This graph on the right illustrates the relationship between each country's total sales (in millions) across all year against the genre"),
                  br(),
-                 p("")
+                 radioButtons("country",
+                              "Choose which country you want to view",
+                              choices = c("NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales")
+                 ),
+                 br(),
+                 p("As we transition through the graph, we observe that all of the listed countries have Action and Sports as their top genres. However, Japan is the only country that has Role-Playing as their top genre instead.")
                ), mainPanel(
-                 
+                 plotOutput("sales"),
+                 br(),
+                 textOutput("sales_text")
                )
              )
     ),
@@ -38,12 +45,19 @@ ui <- fluidPage(
 server <- function(input, output) {
   output$sales <- renderPlot({
     vgsales %>%
-      filter(mag <= input$max) %>%
-      filter(mag >= input$min) %>%
-      filter(magType%in%input$type) %>%
-      ggplot(aes(x = depth, y= mag)) +
-      geom_point(col = input$color) +
-      labs(x = "Depth of event (km)", y = "Magnitude of earthquake")
+      group_by(Genre) %>%
+      reframe(Selected_country_sales = sum(eval(as.symbol(input$country)))) %>%
+      ggplot(aes(x = Genre, y = Selected_country_sales)) +
+      geom_col(position = "dodge", fill = "#56B1F7", color = "black") +
+      labs(x = "Genre", y = paste("Total", input$country, "(in millions)"))
+  })
+  output$sales_text <- renderText({
+    max_val <- vgsales %>%
+      group_by(Genre) %>%
+      reframe(Selected_country_sales = sum(eval(as.symbol(input$country)))) %>%
+      arrange(desc(Selected_country_sales)) %>%
+      head(1)
+    paste("The top selling genre is", max_val$Genre, "with", max_val$Selected_country_sales, "million dollars")
   })
 }
 
