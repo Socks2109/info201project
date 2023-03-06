@@ -16,7 +16,7 @@ vgsales <- read_delim("vgsales.csv")
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   theme = shinytheme("cerulean"),
-  titlePanel("Game data"),
+  titlePanel("Video Game Data"),
   navbarPage("",
              tabPanel("Intro",
                       h2("Background"),
@@ -74,13 +74,13 @@ ui <- fluidPage(
              tabPanel("Sales by Platform",
                       sidebarLayout(
                         sidebarPanel(
-                          selectInput("videogame_platforms_table", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
+                          selectInput("videogame_platforms", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
                                                                                             "PC", "NES", "GB", "GBA", "DS", "x360", "SNES",
                                                                                             "3DS", "N64", "XB", "2600", "GEN", "DC",
                                                                                             "PSP", "XOne", "WiiU", "GC", "SAT", "SCD", "WS",
                                                                                             "NG", "TG16", "3DO", "GG", "PCFX"))),
                         mainPanel(
-                          tableOutput("videogame_platforms_table")
+                          plotOutput("videogame_platforms_plot")
                         )
                       )
              ),
@@ -125,11 +125,11 @@ server <- function(input, output) {
           ". The following selected genres are represented: ", paste(input$genres, collapse=", "))
   })
   output$videogame_platforms_plot <- renderPlot({
-    video_game %>% 
+    vgsales %>% 
       select(Global_Sales,
              Year,
              Platform) %>% 
-      filter(Platform %in% input$videogame_platforms_plot,
+      filter(Platform %in% input$videogame_platforms,
              Global_Sales != "N/A", Year != "N/A", Platform != "N/A") %>%
       group_by(Year) %>%
       summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
@@ -141,7 +141,6 @@ server <- function(input, output) {
     vgsales %>%
       select(Name, Platform, Year, Global_Sales) %>%
       sample_n(10)
-    
   })
 }
 
