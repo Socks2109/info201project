@@ -1,7 +1,7 @@
 library(shiny)
 library(shinythemes)
 library(tidyverse)
-video_game <- read_delim("../vgsales.csv")
+video_game <- read_delim("vgsales copy.csv")
 
 ##UI
 ui <- fluidPage(
@@ -62,7 +62,7 @@ server <- function(input, output) {
              Platform) %>% 
       filter(Platform %in% input$videogame_platforms_plot,
              Global_Sales != "N/A", Year != "N/A", Platform != "N/A") %>%
-      .groups(Platform, Year) %>% 
+      group_by(Platform, Year) %>% 
       summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
       ggplot(aes(x = Year, y = global_sales_in_that_year)) +
       geom_col(fill="violet", col="blue") +
@@ -75,7 +75,7 @@ server <- function(input, output) {
              Platform) %>% 
       filter(Platform %in% input$videogame_platforms_table,
              Global_Sales != "N/A", Year != "N/A", Platform != "N/A") %>%
-      .groups(Platform, Year) %>% 
+      group_by(Platform, Year) %>% 
       summarize(global_sales_in_that_year = mean(Global_Sales))
   })
 
