@@ -16,7 +16,7 @@ vgsales <- read_delim("vgsales.csv")
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   theme = shinytheme("cerulean"),
-  titlePanel("Game data"),
+  titlePanel("Video Game Data"),
   navbarPage("",
              tabPanel("Intro",
                       h2("Background"),
@@ -115,7 +115,6 @@ server <- function(input, output) {
     vgsales %>%
       select(Name, Platform, Year, Global_Sales) %>%
       sample_n(10)
-    
   })
 }
 
