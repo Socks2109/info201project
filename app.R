@@ -16,7 +16,7 @@ vgsales <- read_delim("vgsales.csv")
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   theme = shinytheme("cerulean"),
-  titlePanel("Video Game Data"),
+  titlePanel("Game data"),
   navbarPage("",
              tabPanel("Intro",
                       h2("Background"),
@@ -71,6 +71,19 @@ ui <- fluidPage(
                         )
                       )
              ),
+             tabPanel("Sales by Platform",
+                      sidebarLayout(
+                        sidebarPanel(
+                          selectInput("videogame_platforms_table", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
+                                                                                            "PC", "NES", "GB", "GBA", "DS", "x360", "SNES",
+                                                                                            "3DS", "N64", "XB", "2600", "GEN", "DC",
+                                                                                            "PSP", "XOne", "WiiU", "GC", "SAT", "SCD", "WS",
+                                                                                            "NG", "TG16", "3DO", "GG", "PCFX"))),
+                        mainPanel(
+                          tableOutput("videogame_platforms_table")
+                        )
+                      )
+             ),
              tabPanel("Summary",
                       p("Video games, while an extremely profitable industry, are rapidly changing and variable entities. Platforms in particular do not seem to have very long lifespans. Looking at the graphs, most hit their peak of sales in their first year or two but fall rapidly after. Some consoles don't even make it past their first year. Even the most popular consoles like the Wii and Playstation products see sales dip shortly after release. This is less of a surprise considering the rate that large companies are capable of putting out a new console."),
                       p("Genre is more interesting to look at. We see genre stay relatively static both globally and across continents. Action games remain the most popular everywhere except Japan. Japan's highest charting sales are in role-playing games with action games coming in second but still far behind. Genre sales by time give us a look at what genres are popular at what time. Again, action games dominate the market. With the time factor, we can also see what genres are emerging at the time. For example, there are no games under the adventure genre until 1983, and strategy games do not enter the market until 1992."))
@@ -111,10 +124,24 @@ server <- function(input, output) {
     paste("The above bar graph shows data between the years of", input$min, " and ", input$max, 
           ". The following selected genres are represented: ", paste(input$genres, collapse=", "))
   })
+  output$videogame_platforms_plot <- renderPlot({
+    video_game %>% 
+      select(Global_Sales,
+             Year,
+             Platform) %>% 
+      filter(Platform %in% input$videogame_platforms_plot,
+             Global_Sales != "N/A", Year != "N/A", Platform != "N/A") %>%
+      group_by(Year) %>%
+      summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
+      ggplot(aes(x = Year, y = global_sales_in_that_year)) +
+      geom_col(fill="#56B1F7") +
+      labs(x = "Year", y = "Sales in Million")
+  })
   output$sample <- renderTable({
     vgsales %>%
       select(Name, Platform, Year, Global_Sales) %>%
       sample_n(10)
+    
   })
 }
 
