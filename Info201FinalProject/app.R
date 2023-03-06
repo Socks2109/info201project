@@ -16,10 +16,22 @@ vgsales <- read_delim("vgsales.csv")
 ui <- fluidPage(
   titlePanel("Game data"),
   navbarPage("",
-    # Alexis's part
-    tabPanel("Intro",
-             h2("Introduction")
-    ),
+             tabPanel("Intro",
+                      h2("Background"),
+                      p("In just the past century, the world has seen massive technological advancements, not just on a global scale but on a consumer level as well. While technology increased productivity and communication across the planet, it also became highly integrated in people's personal lives. The 1980s saw the popularization of video games which has since cemented itself in the everyday life of people across the planet. Today, global video game sales settle in the hundred-millions yearly."),
+                      h2("Data"),
+                      p("The dataset we used focuses on video games since the 1980s. It contains data on", nrow(vgsales), "individual games and includes relevant information like year, platform, genre, publisher, and sales (both global and regional)."),
+                      h2("Intentions"),
+                      p("For the purposes of this project, the data will be used to display and summarize trends over time and across genre. Our goal is to provide a visual representation of these trends both in a general informative context but also as a potential marketing resource as we consider what factors may display the longest and more profitable trends."),
+                      h2("Research Questions"),
+                      p("- What platforms are most popular in a given year, and how long do they stay popular?"),
+                      p("- Which genres are popular in a given year, and what trends can be associated with their popularity?"),
+                      p("- What does the data look like isolated by region?"),
+                      h3("Data Sample"),
+                      mainPanel(
+                        tableOutput("sample")
+                      )
+             ),
     tabPanel("Country sales vs genre",
              sidebarLayout(
                sidebarPanel(
@@ -57,8 +69,13 @@ ui <- fluidPage(
                )
              )
     ),
+    tabPanel("Summary",
+             p("Video games, while an extremely profitable industry, are rapidly changing and variable entities. Platforms in particular do not seem to have very long lifespans. Looking at the graphs, most hit their peak of sales in their first year or two but fall rapidly after. Some consoles don't even make it past their first year. Even the most popular consoles like the Wii and Playstation products see sales dip shortly after release. This is less of a surprise considering the rate that large companies are capable of putting out a new console."),
+             p("Genre is more interesting to look at. We see genre stay relatively static both globally and across continents. Action games remain the most popular everywhere except Japan. Japan's highest charting sales are in role-playing games with action games coming in second but still far behind. Genre sales by time give us a look at what genres are popular at what time. Again, action games dominate the market. With the time factor, we can also see what genres are emerging at the time. For example, there are no games under the adventure genre until 1983, and strategy games do not enter the market until 1992."))
   )
 )
+
+  
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
@@ -92,6 +109,12 @@ server <- function(input, output) {
     paste("The above bar graph shows data between the years of", input$min, " and ", input$max, 
           ". The following selected genres are represented: ", paste(input$genres, collapse=", "))
   })
+  output$sample <- renderTable({
+    vgsales %>%
+      select(Name, Platform, Year, Global_Sales) %>%
+      sample_n(10)
+  
+})
 }
 
 # Run the application 
