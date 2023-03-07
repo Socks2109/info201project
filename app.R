@@ -73,14 +73,16 @@ ui <- fluidPage(
              ),
              tabPanel("Sales by Platform",
                       sidebarLayout(
-                        sidebarPanel(
+                        sidebarPanel(p("This graph shows the global sales of the assigned platform under the years when there were releases. This graph provides information about the trend and popularity of the platform.
+          Users are able to explore the platform as they wish!"),
                           selectInput("videogame_platforms", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
-                                                                                            "PC", "NES", "GB", "GBA", "DS", "x360", "SNES",
+                                                                                            "PC", "NES", "GB", "GBA", "DS", "X360", "SNES",
                                                                                             "3DS", "N64", "XB", "2600", "GEN", "DC",
                                                                                             "PSP", "XOne", "WiiU", "GC", "SAT", "SCD", "WS",
                                                                                             "NG", "TG16", "3DO", "GG", "PCFX"))),
                         mainPanel(
-                          plotOutput("videogame_platforms_plot")
+                          plotOutput("videogame_platforms_plot"),
+                          textOutput("platform_text")
                         )
                       )
              ),
@@ -134,8 +136,11 @@ server <- function(input, output) {
       group_by(Year) %>%
       summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
       ggplot(aes(x = Year, y = global_sales_in_that_year)) +
-      geom_col(fill="#56B1F7") +
+      geom_col(fill="#56B1F7", color="black") +
       labs(x = "Year", y = "Sales in Million")
+  })
+  output$platform_text <- renderText({
+    paste("As users compare the sales, it can be seen that Playstation has been particularly consistent with its sales")
   })
   output$sample <- renderTable({
     vgsales %>%
