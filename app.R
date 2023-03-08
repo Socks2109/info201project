@@ -19,6 +19,13 @@ ui <- fluidPage(
   titlePanel("Video Game Data"),
   navbarPage("",
              tabPanel("Intro",
+                      mainPanel(
+                        img(
+                          src = "games.JPG",
+                          alt = "Game Pics",
+                          width = 500, height = 350
+                        )
+                      ),
                       h2("Background"),
                       p("In just the past century, the world has seen massive technological advancements, not just on a global scale but on a consumer level as well. While technology increased productivity and communication across the planet, it also became highly integrated in people's personal lives. The 1980s saw the popularization of video games which has since cemented itself in the everyday life of people across the planet. Today, global video game sales settle in the hundred-millions yearly."),
                       h2("Data"),
