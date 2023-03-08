@@ -19,13 +19,6 @@ ui <- fluidPage(
   titlePanel("Video Game Data"),
   navbarPage("",
              tabPanel("Intro",
-                      mainPanel(
-                        img(
-                          src = "games.JPG",
-                          alt = "Game Pics",
-                          width = 500, height = 350
-                        )
-                      ),
                       h2("Background"),
                       p("In just the past century, the world has seen massive technological advancements, not just on a global scale but on a consumer level as well. While technology increased productivity and communication across the planet, it also became highly integrated in people's personal lives. The 1980s saw the popularization of video games which has since cemented itself in the everyday life of people across the planet. Today, global video game sales settle in the hundred-millions yearly."),
                       h2("Data"),
@@ -82,11 +75,11 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(p("This graph shows the global sales of the assigned platform under the years when there were releases. This graph provides information about the trend and popularity of the platform.
           Users are able to explore the platform as they wish!"),
-                          selectInput("videogame_platforms", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
-                                                                                            "PC", "NES", "GB", "GBA", "DS", "X360", "SNES",
-                                                                                            "3DS", "N64", "XB", "2600", "GEN", "DC",
-                                                                                            "PSP", "XOne", "WiiU", "GC", "SAT", "SCD", "WS",
-                                                                                            "NG", "TG16", "3DO", "GG", "PCFX"))),
+                                     selectInput("videogame_platforms", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
+                                                                                                 "PC", "NES", "GB", "GBA", "DS", "X360", "SNES",
+                                                                                                 "3DS", "N64", "XB", "2600", "GEN", "DC",
+                                                                                                 "PSP", "XOne", "WiiU", "GC", "SAT", "SCD", "WS",
+                                                                                                 "NG", "TG16", "3DO", "GG", "PCFX"))),
                         mainPanel(
                           plotOutput("videogame_platforms_plot"),
                           textOutput("platform_text")
