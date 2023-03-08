@@ -17,10 +17,17 @@ ui <- fluidPage(
   titlePanel("Game data"),
   navbarPage("",
              tabPanel("Intro",
+                      mainPanel(
+                        img(
+                          src = "games.JPG",
+                          alt = "Game Pics",
+                          width = 500, height = 350
+                        )
+                      ),
                       h2("Background"),
                       p("In just the past century, the world has seen massive technological advancements, not just on a global scale but on a consumer level as well. While technology increased productivity and communication across the planet, it also became highly integrated in people's personal lives. The 1980s saw the popularization of video games which has since cemented itself in the everyday life of people across the planet. Today, global video game sales settle in the hundred-millions yearly."),
                       h2("Data"),
-                      p("The dataset we used focuses on video games since the 1980s. It contains data on", nrow(vgsales), "individual games and includes relevant information like year, platform, genre, publisher, and sales (both global and regional)."),
+                      p("The dataset we used summarizes data on different video games released since the 1980s. It contains data on", nrow(vgsales), "individual games and includes relevant information like year, platform, genre, publisher, and sales (both global and regional)."),
                       h2("Intentions"),
                       p("For the purposes of this project, the data will be used to display and summarize trends over time and across genre. Our goal is to provide a visual representation of these trends both in a general informative context but also as a potential marketing resource as we consider what factors may display the longest and more profitable trends."),
                       h2("Research Questions"),
@@ -74,6 +81,7 @@ ui <- fluidPage(
              p("Genre is more interesting to look at. We see genre stay relatively static both globally and across continents. Action games remain the most popular everywhere except Japan. Japan's highest charting sales are in role-playing games with action games coming in second but still far behind. Genre sales by time give us a look at what genres are popular at what time. Again, action games dominate the market. With the time factor, we can also see what genres are emerging at the time. For example, there are no games under the adventure genre until 1983, and strategy games do not enter the market until 1992."))
   )
 )
+
 
   
 
